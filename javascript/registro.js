@@ -14,7 +14,7 @@ document.getElementById('registerForm').addEventListener('submit', function(even
         password: password
     };
 
-    axios.post('http://localhost:8090/usuario/v1/saveUsuario', data)
+    axios.post('https://chat-app-back-1.azurewebsites.net/usuario/v1/saveUsuario', data)
         .then(function(response) {
             if (response.data.idUsuario) {
                 // Redirigir al usuario a index.html

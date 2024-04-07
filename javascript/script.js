@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function enviarSolicitud(requestBody) {
         // Supongamos que tienes una función `axios` que maneja las solicitudes HTTP
-        axios.post('http://localhost:8090/usuario/v1/login', requestBody)
+        axios.post('https://chat-app-back-1.azurewebsites.net/usuario/v1/login', requestBody)
             .then(function(response) {
                 // Manejar la respuesta exitosa aquí
                 console.log('Solicitud POST enviada con éxito:', response.data);

@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Establecer conexión con el servicio de websocket
-    const socket = new WebSocket('ws://localhost:8090/chat');
+    const socket = new WebSocket('wss://chat-app-back-1.azurewebsites.net:443/chat');
 
     // Manejar eventos del websocket
     socket.onopen = function(event) {

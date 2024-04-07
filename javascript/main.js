@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '../index.html';
     });
 
-    axios.get('http://localhost:8090/usuario/v1/getAllUsuarios')
+    axios.get('https://chat-app-back-1.azurewebsites.net/usuario/v1/getAllUsuarios')
                 .then(function(response) {
                     const userList = response.data;
                     const userListContainer = document.getElementById('user-list');
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function openChat(button) {
     const userId = button.getAttribute('data-user-id');
     // Llamar al endpoint GET para obtener los datos del usuario seleccionado
-    axios.get(`http://localhost:8090/usuario/v1/usuario/${userId}`)
+    axios.get(`https://chat-app-back-1.azurewebsites.net//usuario/v1/usuario/${userId}`)
     .then(function(response) {
         // Guardar los datos obtenidos en la sesión del navegador
         sessionStorage.setItem('chatUser', JSON.stringify(response.data));
