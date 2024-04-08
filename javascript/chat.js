@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function loadChatMessages(sender, recipient) {
-        axios.get('http://localhost:8090/mensaje/v1/mensajes', {
+        axios.get('https://chat-app-back-1.azurewebsites.net/mensaje/v1/mensajes', {
             params: {
                 sender: sender,
                 recipent: recipient
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Enviar el mensaje a través de la API REST utilizando Axios
-        axios.post('http://localhost:8090/mensaje/v1/saveMensaje', data, {
+        axios.post('https://chat-app-back-1.azurewebsites.net/mensaje/v1/saveMensaje', data, {
             headers: {
               'Content-Type': 'application/json',
               'Access-Control-Allow-Origin': '*'
