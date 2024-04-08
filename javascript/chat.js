@@ -19,6 +19,38 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = '../index.html';
     });
 
+    function loadChatMessages(sender, recipient) {
+        axios.get('http://localhost:8090/mensaje/v1/mensajes', {
+            params: {
+                sender: sender,
+                recipent: recipient
+            }
+        })
+        .then(response => {
+            const messages = response.data;
+            if(messages) {
+                messages.forEach(message => {
+                    // Verificar si el mensaje es del usuario actual o del otro usuario
+                    const senderId = parseInt(message.userSender);
+                    const isCurrentUser = senderId === userInfo.idUsuario;
+                    const messageData = {
+                        content: message.message,
+                        sender: message.userSender,
+                        recipient: message.userRecipent
+                    }
+                    // Agregar el mensaje al chat
+                    addMessageToChat(messageData, isCurrentUser);
+                });
+            } 
+        })
+        .catch(error => {
+            console.error('Error al cargar los mensajes del chat:', error);
+        });
+    }
+
+    // Llamar a la función para cargar los mensajes del chat al abrir la página
+    loadChatMessages(userInfo.idUsuario, chatUserData.idUsuario);
+
     // Establecer conexión con el servicio de websocket
     const socket = new WebSocket('wss://chat-app-back-1.azurewebsites.net:443/chat');
 
@@ -42,13 +74,34 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error en la conexión websocket:', error);
     };
 
-    // Función para enviar un mensaje
+    // Función para enviar un mensaje a través del WebSocket y a través de la API REST
     function sendMessage(message) {
+        // Enviar el mensaje a través del WebSocket
         if (socket.readyState === WebSocket.OPEN) {
             socket.send(JSON.stringify(message));
         } else {
             console.error('La conexión websocket no está abierta');
         }
+        
+        const data = {
+            userSender: message.sender,
+            userRecipent: message.recipient,
+            message: message.content
+        };
+
+        // Enviar el mensaje a través de la API REST utilizando Axios
+        axios.post('http://localhost:8090/mensaje/v1/saveMensaje', data, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*'
+            }
+        })
+        .then(response => {
+            console.log('Mensaje guardado correctamente');
+        })
+        .catch(error => {
+            console.error('Error al guardar el mensaje:', error);
+        });
     }
 
     // Capturar el mensaje del campo de texto y enviarlo al servidor al hacer clic en el botón
