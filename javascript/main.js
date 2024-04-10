@@ -27,15 +27,33 @@ document.addEventListener('DOMContentLoaded', function() {
             userList.forEach(function(user) {
                 if (user.idUsuario !== userId) {
                     const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td><i class="fas fa-user"></i></td>
-                        <td>${user.nombres} ${user.apellidos} ${getUnreadMessagesIndicator(user.idUsuario, userInfo.idUsuario)}</td>
-                        <td>
-                            <button class="btn btn-link" data-user-id="${user.idUsuario}" onclick="openChat(this)">
-                                <i class="fas fa-comment"></i>
-                            </button>
-                        </td>
-                    `;
+                    const cell = row.insertCell(0);
+                    cell.innerHTML = `<i class="fas fa-user"></i>`;
+
+                    const cell2 = row.insertCell(1);
+                    cell2.innerHTML = `${user.nombres} ${user.apellidos}`;
+                    
+                    getUnreadMessagesIndicator(userInfo.idUsuario, user.idUsuario)
+                        .then(unreadMessagesCount => {
+                            console.log(unreadMessagesCount)
+                            if (unreadMessagesCount > 0) {
+                                cell2.innerHTML += ` <span class="badge badge-primary" id="unread-count">${unreadMessagesCount}</span>`;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error al obtener la cantidad de mensajes no leídos:', error);
+                        });
+
+                    const cell3 = row.insertCell(2);
+                    const button = document.createElement('button');
+                    button.className = 'btn btn-link';
+                    button.setAttribute('data-user-id', user.idUsuario);
+                    button.innerHTML = `<i class="fas fa-comment"></i>`;
+                    button.onclick = function() {
+                        openChat(this);
+                    };
+                    cell3.appendChild(button);
+
                     userListContainer.appendChild(row);
                 }
             });
@@ -60,12 +78,12 @@ function openChat(button) {
         });
 }
 
-function getUnreadMessagesIndicator(userId, idUsuario) {
-    axios.get(`https://chat-app-back-1.azurewebsites.net/usuario/v1/noLeidos?sender=${userId}&recipient=${idUsuario}`)
+function getUnreadMessagesIndicator(userSender, userRecipient) {
+    return axios.get(`https://chat-app-back-1.azurewebsites.net/usuario/v1/noLeidos?sender=${userSender}&recipent=${userRecipient}`)
         .then(function(response) {
             const unreadMessagesCount = response.data;
             if (unreadMessagesCount > 0) {
-                return `<span class="badge badge-primary">${unreadMessagesCount}</span>`;
+                return unreadMessagesCount;
             } else {
                 return '';
             }
