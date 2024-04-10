@@ -90,12 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Enviar el mensaje a través de la API REST utilizando Axios
-        axios.post('https://chat-app-back-1.azurewebsites.net/usuario/v1/saveMensaje', data, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            }
-        })
+        axios.post('https://chat-app-back-1.azurewebsites.net/usuario/v1/saveMensaje', data)
         .then(response => {
             console.log('Mensaje guardado correctamente');
         })
