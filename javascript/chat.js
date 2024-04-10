@@ -103,14 +103,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('send-button').addEventListener('click', function(event) {
         event.preventDefault();
         const messageText = document.getElementById('message-text').value;
-        const messageToSend = {
-            sender: userInfo.idUsuario,
-            recipient: chatUserData.idUsuario,
-            content: messageText
-        };
-        sendMessage(messageToSend);
-        // Limpiar el campo de texto después de enviar el mensaje
-        document.getElementById('message-text').value = '';
+        if (messageText !== '') { // Verificar si el mensaje no está vacío
+            const messageToSend = {
+                sender: userInfo.idUsuario,
+                recipient: chatUserData.idUsuario,
+                content: messageText
+            };
+            sendMessage(messageToSend);
+            // Limpiar el campo de texto después de enviar el mensaje
+            document.getElementById('message-text').value = '';
+        } else {
+            console.log('No se puede enviar un mensaje vacío');
+        }
     });
 });
 

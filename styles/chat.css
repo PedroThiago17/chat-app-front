@@ -10,6 +10,7 @@
 
 .chat-container {
     overflow-y: auto; /* Permite hacer scroll en caso de que los mensajes excedan el tamaño del contenedor */
+    max-height: 78vh;
 }
 
 /* Estilos para las burbujas de mensajes */
